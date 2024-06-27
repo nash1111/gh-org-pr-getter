@@ -40,13 +40,16 @@ func main() {
 		}
 		fmt.Printf("Pull Requests for %s:\n", repo.Name)
 		for _, pr := range prs {
-			fmt.Println(pr.Title)
+			// fmt.Println(pr.Title)
+			fmt.Println(pr)
 		}
 	}
 }
 
 type PullRequest struct {
-	Title string `json:"title"`
+	Title       string `json:"title"`
+	Body        string `json:"body"`
+	Description string `json:"description"`
 }
 
 func getPullRequests(client api.RESTClient, org, repo string) ([]PullRequest, error) {
