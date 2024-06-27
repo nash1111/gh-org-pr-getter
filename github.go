@@ -12,6 +12,7 @@ type PullRequest struct {
 	Body        string    `json:"body"`
 	Description string    `json:"description"`
 	CreatedAt   time.Time `json:"created_at"`
+	Url         string    `json:"html_url"`
 }
 
 func getPullRequests(client api.RESTClient, org, repo string) ([]PullRequest, error) {

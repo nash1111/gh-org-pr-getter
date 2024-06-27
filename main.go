@@ -46,6 +46,6 @@ func main() {
 	})
 
 	for _, pr := range allPRs {
-		fmt.Printf("CreatedAt: %s\n", pr.CreatedAt)
+		fmt.Printf("CreatedAt: %s, URL: %s\n", pr.CreatedAt, pr.Url)
 	}
 }
