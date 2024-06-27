@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"sort"
 
 	"github.com/cli/go-gh/v2/pkg/api"
 )
@@ -30,36 +31,21 @@ func main() {
 		return
 	}
 
-	fmt.Printf("Repositories in organization %s:\n", org)
+	var allPRs []PullRequest
 	for _, repo := range repos {
-		fmt.Println(repo.Name)
 		prs, err := getPullRequests(*client, org, repo.Name)
 		if err != nil {
 			fmt.Println(err)
 			continue
 		}
-		fmt.Printf("Pull Requests for %s:\n", repo.Name)
-		for _, pr := range prs {
-			// fmt.Println(pr.Title)
-			fmt.Println(pr)
-		}
+		allPRs = append(allPRs, prs...)
+	}
+
+	sort.Slice(allPRs, func(i, j int) bool {
+		return allPRs[i].CreatedAt.Before(allPRs[j].CreatedAt)
+	})
+
+	for _, pr := range allPRs {
+		fmt.Printf("CreatedAt: %s\n", pr.CreatedAt)
 	}
 }
-
-type PullRequest struct {
-	Title       string `json:"title"`
-	Body        string `json:"body"`
-	Description string `json:"description"`
-}
-
-func getPullRequests(client api.RESTClient, org, repo string) ([]PullRequest, error) {
-	var prs []PullRequest
-	err := client.Get(fmt.Sprintf("repos/%s/%s/pulls", org, repo), &prs)
-	if err != nil {
-		return nil, err
-	}
-	return prs, nil
-}
-
-// For more examples of using go-gh, see:
-// https://github.com/cli/go-gh/blob/trunk/example_gh_test.go
