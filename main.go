@@ -22,7 +22,8 @@ func main() {
 	}
 
 	var repos []struct {
-		Name string `json:"name"`
+		Name     string `json:"name"`
+		Archived bool   `json:"archived"`
 	}
 
 	err = client.Get(fmt.Sprintf("orgs/%s/repos", org), &repos)
@@ -33,6 +34,9 @@ func main() {
 
 	var allPRs []PullRequest
 	for _, repo := range repos {
+		if repo.Archived {
+			continue
+		}
 		prs, err := getPullRequests(*client, org, repo.Name)
 		if err != nil {
 			fmt.Println(err)
