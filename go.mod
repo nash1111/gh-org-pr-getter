@@ -1,6 +1,8 @@
 module github.com/nash1111/gh-org-pr-getter
 
-go 1.22.2
+go 1.21
+
+toolchain go1.21.5
 
 require github.com/cli/go-gh/v2 v2.9.0
 
